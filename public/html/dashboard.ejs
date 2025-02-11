@@ -6,12 +6,139 @@
     <title>Growtopia - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .smooth-transition {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Button Style */
+        .custom-button {
+            position: relative;
+            padding: 10px 20px;
+            border-radius: 7px;
+            border: 1px solid rgb(61, 106, 255);
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 2px;
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            box-shadow: 0 0 0 0 transparent;
+            transition: all 0.2s ease-in;
+        }
+
+        .custom-button:hover {
+            background: rgb(61, 106, 255);
+            box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
+            transition: all 0.2s ease-out;
+        }
+
+        .custom-button:hover::before {
+            animation: sh02 0.5s 0s linear;
+        }
+
+        .custom-button::before {
+            content: '';
+            display: block;
+            width: 0px;
+            height: 86%;
+            position: absolute;
+            top: 7%;
+            left: 0%;
+            opacity: 0;
+            background: #fff;
+            box-shadow: 0 0 50px 30px #fff;
+            transform: skewX(-20deg);
+        }
+
+        @keyframes sh02 {
+            from {
+                opacity: 0;
+                left: 0%;
+            }
+            50% {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                left: 100%;
+            }
+        }
+
+        .custom-button:active {
+            box-shadow: 0 0 0 0 transparent;
+            transition: box-shadow 0.2s ease-in;
+        }
+
+        /* Input Style */
+        .group {
+            display: flex;
+            line-height: 30px;
+            align-items: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .input {
+            width: 100%;
+            height: 45px;
+            line-height: 30px;
+            padding: 0 5rem;
+            padding-left: 3rem;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            outline: none;
+            background-color: #f8fafc;
+            color: #0d0c22;
+            transition: .5s ease;
+        }
+
+        .input::placeholder {
+            color: #94a3b8;
+        }
+
+        .input:focus, .input:hover {
+            outline: none;
+            border-color: rgba(129, 140, 248);
+            background-color: #fff;
+            box-shadow: 0 0 0 5px rgb(129 140 248 / 30%);
+        }
+
+        .icon {
+            position: absolute;
+            left: 1rem;
+            fill: none;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /* Background and overall theme */
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body class="flex flex-col items-center justify-center h-screen bg-[#e0f7fa]">
     <div class="fixed inset-0 flex items-center justify-center">
-        <div class="relative bg-[#2b4d6d] border-4 border-[#87b8cc] shadow-lg p-6 w-80 rounded-lg">
-            <p class="text-white text-center font-bold text-2xl">Login</p>
-            <div id="errorDiv" class="hidden flex flex-col mt-2 text-xs text-red-700 font-bold px-[5px] bg-[#2b4d6d] rounded">
+        <div class="relative bg-[#2b4d6d] border-4 border-[#87b8cc] shadow-2xl p-6 w-90 rounded-lg fade-in">
+            <p class="text-white text-center font-bold text-2xl mb-4">Networking Login Page</p>
+            <div id="errorDiv" class="hidden flex flex-col mt-2 text-xs text-red-700 font-bold px-[5px] bg-[rgba(43,77,109,0.8)] rounded">
                 <a id="errorMessage"></a>
             </div>
             <form 
@@ -19,32 +146,51 @@
             action="/player/growid/login/validate"
             accept-charset="UTF-8"
             id="loginForm" class="mt-3">
-                <div class="mb-1">
-                    <input name="type" value="log" type="hidden" />
-                    <input name="_token" value="<%= JSON.stringify(data) %>" type="hidden" />
-                    <label for="loginGrowId" class="block text-white text-xs">GrowID</label>
-                    <div class="flex items-center border-2 border-[#81d4fa] rounded bg-[#2b4d6d] px-1 py-1">
-                        <i class="fas fa-user text-white mr-1 text-xs"></i>
-                        <input type="text" name="growId" id="loginGrowId" class="w-full bg-[#2b4d6d] text-white text-xs placeholder-white focus:outline-none" placeholder="Enter your growid">
-                    </div>
+            <div class="mb-4">
+                <label for="loginGrowId" class="block text-white text-xs mb-1">GrowID</label>
+                <div class="group">
+                    <svg stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon">
+                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linejoin="round" stroke-linecap="round"></path>
+                    </svg>
+                    <input class="input" type="text" name="growId" id="loginGrowId" placeholder="Enter your GrowID" autocomplete="off">
                 </div>
-                <div class="mb-1">
-                    <label for="loginPassword" class="block text-white text-xs">Password</label>
-                    <div class="flex items-center border-2 border-[#81d4fa] rounded bg-[#2b4d6d] px-1 py-1">
-                        <i class="fas fa-lock text-white mr-1 text-xs"></i>
-                        <input type="password" name="password" id="loginPassword" class="w-full bg-[#2b4d6d] text-white text-xs placeholder-white focus:outline-none" placeholder="Enter your password">
-                        <button type="button" id="toggleLogPassword" class="text-white ml-2 focus:outline-none text-xs">
+            </div>
+                <div class="mb-4">
+                    <label for="loginPassword" class="block text-white text-xs mb-1">Password</label>
+                    <div class="group">
+                        <svg stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon">
+                            <path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" stroke-linejoin="round" stroke-linecap="round"></path>
+                        </svg>
+                        <input class="input" type="password" name="password" id="loginPassword" placeholder="Enter your password">
+                        <button type="button" id="toggleLogPassword" class="text-white ml-2 focus:outline-none text-xs smooth-transition hover:text-[#00b8ff]">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                 </div>
                 <div class="flex justify-end items-center">
-                    <button id="loginButton" class="px-2 py-1 rounded bg-[#00b8ff] text-white text-xs hover:bg-[#06a4dd] transition duration-300 ease-in-out transform hover:scale-105">Login</button>
+                    <button id="loginButton" class="custom-button">Login Bro?</button>
                 </div>
             </form>
         </div>
     </div>
     <script>
+         // Blokir klik kanan
+         document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Blokir F12 dan kombinasi keyboard lainnya
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode == 123 || // F12
+                (e.ctrlKey && e.shiftKey && e.keyCode == 73) || // Ctrl+Shift+I
+                (e.ctrlKey && e.keyCode == 85)) { // Ctrl+U
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Sisanya script tetap sama, tambahkan CSS berikut di bagian style
         document.addEventListener('DOMContentLoaded', function () {
             if (localStorage.getItem('growId')) {
                 document.getElementById('loginGrowId').value = localStorage.getItem('growId');
@@ -72,9 +218,10 @@
                 loginForm.submit();
                 localStorage.setItem('growId', document.getElementById('loginGrowId').value);
             }
-        })
+        });
+
         document.getElementById('toggleLogPassword').addEventListener('click', function () {
-            const LpasswordField = document.getElementById('loginPassword')
+            const LpasswordField = document.getElementById('loginPassword');
             const LpasswordFieldType = LpasswordField.getAttribute('type');
             if (LpasswordFieldType === 'password') {
                 LpasswordField.setAttribute('type', 'text');
